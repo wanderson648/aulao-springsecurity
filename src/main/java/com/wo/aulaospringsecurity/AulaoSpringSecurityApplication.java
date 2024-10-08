@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,10 +44,15 @@ class HttpController {
     }
 
     @GetMapping("/jwt")
-    String jwt(@AuthenticationPrincipal OidcUser principal) {
-        return """
-                <h1>JWT </h1>
-                """;
+    String jwt(@AuthenticationPrincipal Jwt jwt) {
+        return String.format("""
+                Principal: %s
+                
+                Email attribute: %s
+                
+                JWT: %s
+                
+                """, jwt.getClaims(), jwt.getClaim("email"), jwt.getTokenValue());
     }
 
 }
